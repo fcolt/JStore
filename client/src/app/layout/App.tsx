@@ -8,6 +8,10 @@ import { Container, CssBaseline } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import ServerError from "../errors/ServerError";
+import NotFound from "../errors/NotFound";
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -27,6 +31,7 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
+      <ToastContainer theme='colored' position='bottom-right' hideProgressBar/>
       <CssBaseline />
       <Header darkMode={darkMode} handleThemeChange={handleThemeChange}/>
       <Container>
@@ -36,6 +41,8 @@ function App() {
           <Route path='/catalog/:id' element={<ProductDetails/>}/>
           <Route path='/about' element={<AboutPage/>}/>
           <Route path='/contact' element={<ContactPage/>}/>
+          <Route path='/server-error' element={<ServerError/>}/>
+          <Route path='/not-found' element={<NotFound/>}/>
         </Routes>
       </Container>
     </ThemeProvider>

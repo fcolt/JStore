@@ -1,15 +1,40 @@
-import React from 'react';
+import React, { FC, useLayoutEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import './app/layout/styles.css';
 import App from './app/layout/App';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter } from 'react-router-dom';
+import { Router } from 'react-router-dom';
+import { createBrowserHistory, BrowserHistory } from 'history';
+
+interface Props {
+  history: BrowserHistory
+}
+
+export const history = createBrowserHistory();
+const CustomRouter: FC<Props> = ({ history, ...props }) => {
+  const [state, setState] = useState({
+    action: history.action,
+    location: history.location
+  });
+
+  useLayoutEffect(() => history.listen(setState), [history]);
+
+  return (
+    <Router
+      {...props}
+      location={state.location}
+      navigationType={state.action}
+      navigator={history}
+    />
+  );
+};
+
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
+    <CustomRouter history={history}>
       <App />
-    </BrowserRouter>
+    </CustomRouter>
   </React.StrictMode>,
   document.getElementById('root')
 );
