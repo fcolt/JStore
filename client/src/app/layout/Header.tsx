@@ -7,6 +7,8 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { useState } from "react";
 import LoginIcon from '@mui/icons-material/Login';
 import MenuIcon from '@mui/icons-material/Menu';
+import { Link } from "react-router-dom";
+import { useStoreContext } from "../../app/context/StoreContext";
 
 interface Props {
     darkMode: boolean;
@@ -27,7 +29,7 @@ const rightLinks = [
 const navStyles = {
   color: 'inherit',
   textDecoration: 'none',
-  typography: 'h7',
+  typography: 'h5',
   '&:hover': {
       color:'grey.500'
   },
@@ -37,6 +39,9 @@ const navStyles = {
 }
 
 export default function Header({darkMode, handleThemeChange}: Props) {
+  const {basket} = useStoreContext();
+  const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0);
+
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   
@@ -125,8 +130,8 @@ export default function Header({darkMode, handleThemeChange}: Props) {
               </Box>
 
               <Box display='flex' alignItems='center'>
-                  <IconButton size='large' sx={{color: 'inherit'}}>
-                    <Badge badgeContent={4} color='secondary'>
+                  <IconButton component={Link} to='/basket' size='large' sx={{color: 'inherit'}}>
+                    <Badge badgeContent={itemCount} color='secondary'>
                       <ShoppingCart />                  
                     </Badge>
                   </IconButton>
@@ -199,8 +204,8 @@ export default function Header({darkMode, handleThemeChange}: Props) {
               </List>  
                 
               <Box display='flex' alignItems='center'>
-                  <IconButton size='large' sx={{color: 'inherit'}}>
-                    <Badge badgeContent={4} color='secondary'>
+                  <IconButton component={Link} to='/basket' size='large' sx={{color: 'inherit'}}>
+                    <Badge badgeContent={itemCount} color='secondary'>
                       <ShoppingCart />                  
                     </Badge>
                   </IconButton>

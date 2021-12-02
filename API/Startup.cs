@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using API.Middleware;
+using API.RequestHelpers;
 
 namespace API
 {
@@ -24,6 +25,7 @@ namespace API
         {
 
             services.AddControllers();
+            services.AddAutoMapper(typeof(MappingProfiles).Assembly);
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
@@ -52,7 +54,7 @@ namespace API
 
             app.UseCors(opt => 
             {  
-                opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");  
+                opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:3000");  
             });
 
             app.UseAuthorization();

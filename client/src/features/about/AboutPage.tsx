@@ -20,8 +20,8 @@ export default function AboutPage() {
             justifyContent="center"
             marginBottom='20px'
         >
-            <Typography gutterBottom variant='h2'>
-                Errors for testing purposes
+            <Typography gutterBottom variant='h6'>
+                Since this is a portfolio project, I've taken the liberty of making this page an error testing page so have some buttons :)
             </Typography>
 
             <ButtonGroup style={{flexWrap: 'wrap', textAlign: 'center', display: 'inline-block'}}>
