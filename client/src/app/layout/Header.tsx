@@ -8,7 +8,7 @@ import { useState } from "react";
 import LoginIcon from '@mui/icons-material/Login';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link } from "react-router-dom";
-import { useStoreContext } from "../../app/context/StoreContext";
+import { useAppSelector } from "../store/configureStore";
 
 interface Props {
     darkMode: boolean;
@@ -39,7 +39,7 @@ const navStyles = {
 }
 
 export default function Header({darkMode, handleThemeChange}: Props) {
-  const {basket} = useStoreContext();
+  const {basket} = useAppSelector(state => state.basket);
   const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0);
 
   const [anchorElNav, setAnchorElNav] = useState(null);
@@ -119,10 +119,10 @@ export default function Header({darkMode, handleThemeChange}: Props) {
                   >
                       JStore
                   </Typography>
-                  <MaterialUISwitch 
-                    checked={darkMode} 
-                    onChange={handleThemeChange}
-                  />
+                <MaterialUISwitch 
+                  checked={darkMode} 
+                  onChange={handleThemeChange}
+                />
               </Box>
 
               <Box display='flex' alignItems='center'>
