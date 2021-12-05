@@ -1,30 +1,26 @@
-using System;
-using System.Linq;
 using System.Threading.Tasks;
 using API.Data;
 using API.DTOs;
-using API.Entities;
+using API.Interfaces;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
     public class BasketController : BaseApiController
     {
-        private readonly StoreContext _context;
         private readonly IMapper _mapper;
-        public BasketController(StoreContext context, IMapper mapper)
+        private readonly IUnitOfWork _unitOfWork;
+        public BasketController(IUnitOfWork unitOfWork, IMapper mapper)
         {
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _context = context; 
         }
 
         [HttpGet(Name = "GetBasket")]
         public async Task<ActionResult<BasketDto>> GetBasket()
         {
-            var basket = await RetrieveBasket();
+            var basket = await _unitOfWork.BasketRepository.RetrieveBasketAsync(Request);
 
             if (basket == null) return NotFound();
 
@@ -34,17 +30,17 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult<BasketDto>> AddItemToBasket(int productId, int quantity)
         {
-            var basket = await RetrieveBasket();
+            var basket = await _unitOfWork.BasketRepository.RetrieveBasketAsync(Request);
 
-            if (basket == null) basket = CreateBasket(); 
+            if (basket == null) basket = _unitOfWork.BasketRepository.CreateBasket(Response); 
 
-            var product = await _context.Products.FindAsync(productId);
+            var product = await _unitOfWork.ProductRepository.GetProductAsync(productId);
 
             if (product == null) return BadRequest(new ProblemDetails{Title = "Product not found"});
 
             basket.AddItem(product, quantity);
 
-            var result = await _context.SaveChangesAsync() > 0;
+            var result = await _unitOfWork.Complete();
             
             if (result) return CreatedAtRoute("GetBasket", _mapper.Map<BasketDto>(basket));
 
@@ -54,35 +50,17 @@ namespace API.Controllers
         [HttpDelete]
         public async Task<ActionResult> RemoveBasketItem(int productId, int quantity)
         {
-            var basket = await RetrieveBasket();
+            var basket = await _unitOfWork.BasketRepository.RetrieveBasketAsync(Request);
 
             if (basket == null) return NotFound();
             
             basket.RemoveItem(productId, quantity);
 
-            var result = await _context.SaveChangesAsync() > 0;
+            var result = await _unitOfWork.Complete();
 
             if (result) return Ok();
 
             return BadRequest(new ProblemDetails{Title = "Problem removing item from basket"});
-        }
-
-        private async Task<Basket> RetrieveBasket()
-        {
-            return await _context.Baskets
-                .Include(i => i.Items)
-                .ThenInclude(p => p.Product)
-                .FirstOrDefaultAsync(x => x.BuyerId == Request.Cookies["buyerId"]);
-        }
-
-        private Basket CreateBasket()
-        {
-            var buyerId = Guid.NewGuid().ToString();
-            var cookieOptions = new CookieOptions{IsEssential = true, Expires = DateTime.Now.AddDays(30)};
-            Response.Cookies.Append("buyerId", buyerId, cookieOptions);
-            var basket = new Basket{BuyerId = buyerId};
-            _context.Baskets.Add(basket);
-            return basket;
         }
     }
 }
