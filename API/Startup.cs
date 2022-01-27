@@ -40,13 +40,16 @@ namespace API
 
                 string connStr;
 
+                // Depending on if in development or production, use either Heroku-provided
+                // connection string, or development connection string from env var.
                 if (env == "Development")
                 {
-                    // Use connection string from file
+                    // Use connection string from file.
                     connStr = Configuration.GetConnectionString("DefaultConnection");
                 }
                 else
                 {
+                    // Use connection string provided at runtime by Heroku.
                     var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
                     var databaseUri = new Uri(databaseUrl);
                     var userInfo = databaseUri.UserInfo.Split(':');
@@ -57,11 +60,17 @@ namespace API
                         Port = databaseUri.Port,
                         Username = userInfo[0],
                         Password = userInfo[1],
-                        Database = databaseUri.LocalPath.TrimStart('/')
+                        Database = databaseUri.LocalPath.TrimStart('/'),
+                        SslMode = SslMode.Require, 
+                        TrustServerCertificate = true
                     };
 
-return builder.ToString();
+                    connStr = builder.ToString();
                 }
+
+                // Whether the connection string came from the local development configuration file
+                // or from the environment variable from Heroku, use it to set up your DbContext.
+                options.UseNpgsql(connStr);
             });
 
             services.AddCors();
