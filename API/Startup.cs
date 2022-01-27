@@ -10,6 +10,7 @@ using API.Middleware;
 using API.RequestHelpers;
 using API.Interfaces;
 using System;
+using Npgsql;
 
 namespace API
 {
@@ -46,21 +47,20 @@ namespace API
                 }
                 else
                 {
-                    // Use connection string provided at runtime by Heroku
-                    var connUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+                    var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+                    var databaseUri = new Uri(databaseUrl);
+                    var userInfo = databaseUri.UserInfo.Split(':');
 
-                    //Parse connection URL to connection string for Npgsql
-                    connUrl = connUrl.Replace("postgres://", string.Empty);
-                    var pgUserPass = connUrl.Split("@")[0];
-                    var pgHostPortDb = connUrl.Split("@")[1];
-                    var pgHostPort = pgHostPortDb.Split("/")[0];
-                    var pgDb = pgHostPortDb.Split("/") [1];
-                    var pgUser = pgUserPass.Split(":") [0];
-                    var pgPass = pgUserPass.Split(":") [1];
-                    var pgHost = pgHostPort.Split(":") [0];
-                    var pgPort = pgHostPort.Split(":") [1];
+                    var builder = new NpgsqlConnectionStringBuilder
+                    {
+                        Host = databaseUri.Host,
+                        Port = databaseUri.Port,
+                        Username = userInfo[0],
+                        Password = userInfo[1],
+                        Database = databaseUri.LocalPath.TrimStart('/')
+                    };
 
-                    connStr = $"Server={pgHost};Port={pgPort};UserId={pgUser};Password={pgPass};Database={pgDb};SSL Mode=Require;Trust Server Certificate=true";
+return builder.ToString();
                 }
             });
 
