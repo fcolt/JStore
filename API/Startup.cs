@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using API.Middleware;
 using API.RequestHelpers;
 using API.Interfaces;
+using System;
 
 namespace API
 {
@@ -31,10 +32,38 @@ namespace API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
             });
-            services.AddDbContext<StoreContext>(opt => 
+
+            services.AddDbContext<StoreContext>(options =>
             {
-                opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
+                var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+                string connStr;
+
+                if (env == "Development")
+                {
+                    // Use connection string from file
+                    connStr = Configuration.GetConnectionString("DefaultConnection");
+                }
+                else
+                {
+                    // Use connection string provided at runtime by Heroku
+                    var connUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+
+                    //Parse connection URL to connection string for Npgsql
+                    connUrl = connUrl.Replace("postgres://", string.Empty);
+                    var pgUserPass = connUrl.Split("@")[0];
+                    var pgHostPortDb = connUrl.Split("@")[1];
+                    var pgHostPort = pgHostPortDb.Split("/")[0];
+                    var pgDb = pgHostPortDb.Split("/") [1];
+                    var pgUser = pgUserPass.Split(":") [0];
+                    var pgPass = pgUserPass.Split(":") [1];
+                    var pgHost = pgHostPort.Split(":") [0];
+                    var pgPort = pgHostPort.Split(":") [1];
+
+                    connStr = $"Server={pgHost};Port={pgPort};UserId={pgUser};Password={pgPass};Database={pgDb};SSL Mode=Require;Trust Server Certificate=true";
+                }
             });
+
             services.AddCors();
         }
 
@@ -53,6 +82,9 @@ namespace API
 
             app.UseRouting();
 
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+
             app.UseCors(opt => 
             {  
                 opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:3000");  
@@ -63,6 +95,7 @@ namespace API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapFallbackToController("Index", "Fallback");
             });
         }
     }
