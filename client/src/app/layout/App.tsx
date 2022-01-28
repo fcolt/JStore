@@ -19,6 +19,9 @@ import LoadingComponent from "./LoadingComponent";
 import CheckoutPage from "../../features/checkout/CheckoutPage";
 import { useAppDispatch } from "../store/configureStore";
 import { setBasket } from "../../features/basket/basketSlice";
+import Footer from "./Footer";
+import Login from "../../features/account/Login";
+import Register from "../../features/account/Register";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -69,8 +72,11 @@ function App() {
           <Route path='/not-found' element={<NotFound/>}/>
           <Route path='/basket' element={<BasketPage/>}></Route>
           <Route path='/checkout' element={<CheckoutPage/>}></Route>
+          <Route path='/login' element={<Login/>}></Route>
+          <Route path='/register' element={<Register/>}></Route>
         </Routes>
       </Container>
+      <Footer/>
     </ThemeProvider>
   );
 }

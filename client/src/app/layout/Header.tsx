@@ -67,7 +67,7 @@ export default function Header({darkMode, handleThemeChange}: Props) {
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position='static' sx={{mb: 4}}>
             <Toolbar sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-              {isMobile ? (
+              {isMobile ? (//---------------------------------------------MOBILE--------------------------------------------------------
               <>
               <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center' }}>
                 <IconButton
@@ -173,7 +173,7 @@ export default function Header({darkMode, handleThemeChange}: Props) {
                 </Menu>
               </Box>
               </>
-              ) : (
+              ) : ( //---------------------------------------------------DESKTOP-----------------------------------
               <>
               <Box display='flex' alignItems='center'>
                 <Typography 

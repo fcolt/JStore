@@ -9,7 +9,7 @@ interface Props {
 export default function AppPagination({metaData, onPageChange}: Props) {
     const {currentPage, totalCount, totalPages, pageSize} = metaData;
     return (
-        <Box display='flex' justifyContent='space-between' alignItems='center'>
+        <Box display='flex' justifyContent='space-between' alignItems='center' mb='20px'>
           <Typography>
             Displaying {(currentPage-1)*pageSize+1}-{currentPage*pageSize > totalCount 
                 ? totalCount 
