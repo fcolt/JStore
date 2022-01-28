@@ -110,14 +110,13 @@ export default function Header({darkMode, handleThemeChange}: Props) {
                           {title}
                         </ListItem>
                       ))}
-                      {user &&
                       <ListItem
                           component={NavLink}
                           to={'/inventory'}
                           sx={navStyles}                      
                         >
                           Inventory
-                      </ListItem>}
+                      </ListItem>
                   </List>
                 </Menu>
                 <Typography 
@@ -210,14 +209,13 @@ export default function Header({darkMode, handleThemeChange}: Props) {
                       {title}
                     </ListItem>
                   ))}
-                  {user &&
                   <ListItem
                       component={NavLink}
                       to={'/inventory'}
                       sx={navStyles}                      
                     >
                       Inventory
-                  </ListItem>}
+                  </ListItem>
               </List>  
                 
               <Box display='flex' alignItems='center'>
