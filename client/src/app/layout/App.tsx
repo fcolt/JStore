@@ -22,6 +22,7 @@ import { setBasket } from "../../features/basket/basketSlice";
 import Footer from "./Footer";
 import Login from "../../features/account/Login";
 import Register from "../../features/account/Register";
+import Inventory from "../../features/admin/Inventory";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -74,6 +75,7 @@ function App() {
           <Route path='/checkout' element={<CheckoutPage/>}></Route>
           <Route path='/login' element={<Login/>}></Route>
           <Route path='/register' element={<Register/>}></Route>
+          <Route path='/inventory' element={<Inventory/>}></Route>
         </Routes>
       </Container>
       <Footer/>

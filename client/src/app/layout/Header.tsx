@@ -39,6 +39,7 @@ const navStyles = {
 }
 
 export default function Header({darkMode, handleThemeChange}: Props) {
+  const { user } = useAppSelector(state => state.account);
   const {basket} = useAppSelector(state => state.basket);
   const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -109,6 +110,14 @@ export default function Header({darkMode, handleThemeChange}: Props) {
                           {title}
                         </ListItem>
                       ))}
+                      {user &&
+                      <ListItem
+                          component={NavLink}
+                          to={'/inventory'}
+                          sx={navStyles}                      
+                        >
+                          Inventory
+                      </ListItem>}
                   </List>
                 </Menu>
                 <Typography 
@@ -201,6 +210,14 @@ export default function Header({darkMode, handleThemeChange}: Props) {
                       {title}
                     </ListItem>
                   ))}
+                  {user &&
+                  <ListItem
+                      component={NavLink}
+                      to={'/inventory'}
+                      sx={navStyles}                      
+                    >
+                      Inventory
+                  </ListItem>}
               </List>  
                 
               <Box display='flex' alignItems='center'>
