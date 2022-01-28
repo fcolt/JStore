@@ -1,4 +1,3 @@
-using System.Linq;
 using API.DTOs;
 using API.Entities;
 using AutoMapper;
@@ -16,6 +15,8 @@ namespace API.RequestHelpers
                 .ForMember(dest => dest.PictureUrl, opt => opt.MapFrom(src => src.Product.PictureUrl))
                 .ForMember(dest => dest.Brand, opt => opt.MapFrom(src => src.Product.Brand))
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Product.Type));
+            CreateMap<CreateProductDto, Product>();
+            CreateMap<UpdateProductDto, Product>();
         }
     }
 }
