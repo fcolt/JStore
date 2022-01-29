@@ -5,7 +5,7 @@ import { currencyFormat } from "../../app/util/util";
 export default function BasketSummary() {
     const {basket} = useAppSelector(state => state.basket);
     const subtotal = basket?.items.reduce((sum, item) => sum + item.price * item.quantity, 0) ?? 0;
-    const deliveryFee = subtotal/100 < 100 ? 500 : 0
+    const deliveryFee = subtotal/100 < 100 && subtotal !== 0 ? 500 : 0
     
     return (
         <>

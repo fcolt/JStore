@@ -22,6 +22,7 @@ export const signInUser = createAsyncThunk<User, FieldValues>(
             const {basket, ...user} = userDto;
             if (basket) thunkAPI.dispatch(setBasket(basket));
             localStorage.setItem('user', JSON.stringify(user));
+            toast.success('Successfully logged in!');
             return user;
         } catch (error: any) {
             return thunkAPI.rejectWithValue({error: error.data});

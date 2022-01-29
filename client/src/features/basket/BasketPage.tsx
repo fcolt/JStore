@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
 import { currencyFormat } from "../../app/util/util";
 import { addBasketItemAsync, removeBasketItemAsync } from "./basketSlice";
-import BasketSummary from "./BasketSummary"
+import BasketSummary from "./BasketSummary";
 
 export default function BasketPage() {
     const {basket, status} = useAppSelector(state => state.basket);

@@ -263,11 +263,8 @@ export default function Header({darkMode, handleThemeChange}: Props) {
                   </MenuItem>
                 </Menu>
               </Box>
-
               </>
               )}
-              
-
             </Toolbar>
         </AppBar>
       </Box>

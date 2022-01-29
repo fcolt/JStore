@@ -1,6 +1,8 @@
-import { Button, ButtonGroup, Typography } from "@mui/material";
+import { Button, ButtonGroup, Container, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
 import { decrement, increment } from "./counterSlice";
+import { SocialIcon } from 'react-social-icons';
+import "./socialStyle.css";
 
 export default function ContactPage() {
     const dispatch = useAppDispatch();
@@ -17,6 +19,10 @@ export default function ContactPage() {
                 <Button onClick={() => dispatch(decrement(1))} variant='contained' color='error'>Decrement</Button>
                 <Button onClick={() => dispatch(increment(1))} variant='contained' color='error'>Increment</Button>
             </ButtonGroup>
+            <Container style={{display: 'flex', justifyContent: 'center'}}>
+                <SocialIcon className="social" url="https://github.com/fcolt" />
+                <SocialIcon className="social" url="https://www.linkedin.com/in/fabian-olteanu/" />
+            </Container>
         </>
     )
 }

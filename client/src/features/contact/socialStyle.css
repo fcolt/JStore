@@ -1,0 +1,8 @@
+.social:hover {
+    filter:grayscale(100%);
+    -webkit-filter: grayscale(100%);
+}
+
+.social {
+    margin-right: 10px;
+}
