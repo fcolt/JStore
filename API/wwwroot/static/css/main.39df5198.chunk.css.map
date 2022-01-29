@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://src/features/contact/socialStyle.css"],"names":[],"mappings":"AAAA,cACI,sBAAsB,CACtB,8BACJ,CAEA,QACI,iBACJ","file":"main.39df5198.chunk.css","sourcesContent":[".social:hover {\r\n    filter:grayscale(100%);\r\n    -webkit-filter: grayscale(100%);\r\n}\r\n\r\n.social {\r\n    margin-right: 10px;\r\n}\r\n"]}
